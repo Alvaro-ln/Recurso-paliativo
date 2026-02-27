@@ -1,33 +1,36 @@
 javascript:(function(){
-if(window.__clienteObserverAtivo)return;
-window.__clienteObserverAtivo=true;
+if(window.__linkClienteAtivo)return;
+window.__linkClienteAtivo=true;
 
-function aplicarLink(){
-  const h=document.querySelector('#interaction-header-participant-name');
-  if(!h)return;
+function atualizar(){
+  const el=document.querySelector('#interaction-header-participant-name');
+  if(!el)return;
 
-  const textoOriginal=h.textContent;
+  const texto=el.textContent;
 
-  const regex=/\[(\d+)\]/g;
+  const match=texto.match(/\[(\d+)\]/);
+  if(!match)return;
 
-  const novoHTML=textoOriginal.replace(regex,function(match,id){
-    const url='https://novorevan.brisanet.net.br/#/venda/cliente/'+id+'/sobre';
-    return '[<a href="'+url+'" target="_blank" style="color:#00bfff;font-weight:bold;">'+id+'</a>]';
-  });
+  const id=match[1];
+  const url='https://novorevan.brisanet.net.br/#/venda/cliente/'+id+'/sobre';
 
-  if(h.innerHTML!==novoHTML){
-    h.innerHTML=novoHTML;
-  }
+  // Remove links antigos
+  const links=el.querySelectorAll('a[data-cliente-link]');
+  links.forEach(a=>a.replaceWith(a.textContent));
+
+  // Substitui apenas o ID
+  el.innerHTML=el.innerHTML.replace(
+    '['+id+']',
+    '[<a data-cliente-link="1" href="'+url+'" target="_blank" style="color:#00bfff;font-weight:bold;">'+id+'</a>]'
+  );
 }
 
-aplicarLink();
-
-const observer=new MutationObserver(function(){
-  aplicarLink();
-});
-
-observer.observe(document.body,{
+new MutationObserver(atualizar)
+.observe(document.querySelector('#interaction-header-participant-name'),{
   childList:true,
-  subtree:true
+  subtree:true,
+  characterData:true
 });
+
+atualizar();
 })();
