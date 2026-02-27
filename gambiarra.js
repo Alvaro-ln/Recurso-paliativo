@@ -1,41 +1,62 @@
-javascript:(function(){
+(function() {
+    const targetId = "interaction-header-participant-name";
+    const buttonClass = "btn-abrir-cliente-custom";
 
-if(window.__botaoClienteAtivo)return;
-window.__botaoClienteAtivo=true;
+    function injectButton() {
+        const header = document.getElementById(targetId);
+        if (!header) return;
 
-function criarOuAtualizarBotao(){
-  const el=document.querySelector('#interaction-header-participant-name');
-  if(!el)return;
+        // Evita duplicados: verifica se o botão já existe dentro deste elemento
+        if (header.querySelector(`.${buttonClass}`)) return;
 
-  const match=el.textContent.match(/\[(\d+)\]/);
-  if(!match)return;
+        // Extrai o ID (o número dentro do último par de colchetes)
+        const text = header.innerText;
+        const matches = text.match(/\[(\d+)\]/g);
+        
+        if (matches && matches.length > 0) {
+            // Pega o último par de colchetes, remove os [ ] e extrai o número
+            const lastMatch = matches[matches.length - 1];
+            const idCliente = lastMatch.replace(/[\[\]]/g, '');
 
-  const id=match[1];
-  const url='https://novorevan.brisanet.net.br/#/venda/cliente/'+id+'/sobre';
+            // Cria o botão
+            const btn = document.createElement("button");
+            btn.innerText = "Abrir Cliente";
+            btn.className = buttonClass;
+            
+            // Estilização básica para o botão ficar visível e bonito
+            btn.style.marginLeft = "15px";
+            btn.style.padding = "5px 10px";
+            btn.style.backgroundColor = "#007bff";
+            btn.style.color = "white";
+            btn.style.border = "none";
+            btn.style.borderRadius = "4px";
+            btn.style.cursor = "pointer";
+            btn.style.fontSize = "14px";
 
-  let botao=document.getElementById('abrir-cliente-btn');
+            // Ação de abrir o link
+            btn.onclick = (e) => {
+                e.preventDefault();
+                const url = `https://novorevan.brisanet.net.br/#/venda/cliente/${idCliente}/sobre`;
+                window.open(url, '_blank');
+            };
 
-  if(!botao){
-    botao=document.createElement('a');
-    botao.id='abrir-cliente-btn';
-    botao.target='_blank';
-    botao.style.marginLeft='10px';
-    botao.style.padding='4px 8px';
-    botao.style.background='#00bfff';
-    botao.style.color='#fff';
-    botao.style.borderRadius='4px';
-    botao.style.fontSize='12px';
-    botao.style.textDecoration='none';
-    botao.innerText='Abrir Cliente';
-    el.appendChild(botao);
-  }
+            // Insere o botão no H2
+            header.appendChild(btn);
+            console.log("Botão 'Abrir Cliente' injetado para o ID:", idCliente);
+        }
+    }
 
-  botao.href=url;
-}
+    // Configura o observador para monitorar mudanças no DOM (atualizações da página)
+    const observer = new MutationObserver(() => {
+        injectButton();
+    });
 
-new MutationObserver(criarOuAtualizarBotao)
-.observe(document.body,{childList:true,subtree:true});
+    // Começa a observar o corpo da página para mudanças
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 
-criarOuAtualizarBotao();
-
+    // Executa uma vez ao carregar o script
+    injectButton();
 })();
