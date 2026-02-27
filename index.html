@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAMBIARRA_ULTRA_SYSTEM</title>
+    <title>GAMBIARRA_DVD_PRO_V2</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
         :root {
-            --bg-color: #050505;
+            --bg-color: #030303;
             --neon-green: #39ff14;
             --neon-pink: #ff00ff;
             --neon-blue: #00ffff;
-            --vhs-gray: #cccccc;
+            --vhs-gray: #dddddd;
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
             background: var(--bg-color);
             color: var(--neon-green);
             font-family: 'VT323', monospace;
@@ -29,157 +27,123 @@
             justify-content: center;
         }
 
-        /* Camadas de Efeito VHS */
+        /* EFEITOS DE INTERFERÊNCIA VHS */
         .vhs-noise {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 100;
             pointer-events: none;
-            opacity: 0.12;
+            opacity: 0.15;
             background: url('https://media.giphy.com/media/oEI9uWUicG3Y166A7v/giphy.gif');
         }
 
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
-            background-size: 100% 4px, 3px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.03), rgba(0, 0, 255, 0.05));
+            background-size: 100% 3px, 3px 100%;
             z-index: 101;
             pointer-events: none;
         }
 
-        /* OSD (On-Screen Display) */
+        /* OSD (Texto de Fita) */
         .osd {
-            position: absolute;
-            top: 5vh;
-            left: 5vw;
-            font-size: clamp(1.5rem, 4vw, 3rem);
-            color: var(--vhs-gray);
-            text-shadow: 3px 3px #000;
-            z-index: 50;
-            letter-spacing: 2px;
+            position: absolute; top: 40px; left: 50px;
+            font-size: 2.5rem; color: var(--vhs-gray);
+            text-shadow: 3px 3px #000; z-index: 50;
         }
 
         .osd-rec {
-            position: absolute;
-            top: 5vh;
-            right: 5vw;
-            color: #ff0000;
-            font-size: clamp(1.5rem, 4vw, 3rem);
+            position: absolute; top: 40px; right: 50px;
+            color: #ff0000; font-size: 2.5rem;
             animation: blink 1s steps(2) infinite;
         }
 
-        /* LOGO DVD GAMBIARRA - TAMANHO DINÂMICO */
+        /* LOGO DVD GAMBIARRA - DINÂMICO */
         #dvd-container {
-            position: absolute;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: 5;
+            position: absolute; top: 0; left: 0;
+            width: 100vw; height: 100vh; z-index: 5;
         }
 
         .dvd-logo {
             position: absolute;
-            /* clamp(mínimo, preferencial, máximo) */
-            font-size: clamp(3rem, 15vw, 18rem); 
+            font-size: clamp(4rem, 18vw, 22rem); 
             font-weight: 900;
             white-space: nowrap;
             color: var(--neon-pink);
-            text-shadow: 8px 8px 0px #000;
+            text-shadow: 10px 10px 0px #000;
             font-style: italic;
-            letter-spacing: -5px;
-            filter: drop-shadow(0 0 15px var(--neon-pink));
-            line-height: 1;
+            letter-spacing: -8px;
+            filter: drop-shadow(0 0 20px var(--neon-pink));
+            line-height: 0.8;
             user-select: none;
+            will-change: transform; /* Otimização de performance */
         }
 
-        /* Interface Central */
+        /* INTERFACE CENTRAL */
         .main-frame {
             position: relative;
             z-index: 150;
-            border: 6px double var(--neon-green);
+            border: 8px double var(--neon-green);
             padding: 40px;
-            background: rgba(0, 0, 0, 0.9);
-            box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
-            width: 90%;
-            max-width: 500px;
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 0 40px rgba(57, 255, 20, 0.4);
+            width: 85%;
+            max-width: 550px;
             text-align: center;
         }
 
         h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin: 0 0 20px 0;
+            font-size: 3.5rem;
+            margin: 0 0 10px 0;
             color: var(--neon-blue);
-            text-shadow: 3px 3px 0px #000;
+            text-transform: uppercase;
         }
 
-        /* Botão Bookmarklet */
         .bookmark-btn {
             display: inline-block;
-            margin: 25px 0;
-            padding: clamp(15px, 3vw, 25px) clamp(20px, 4vw, 40px);
-            border: 3px solid var(--neon-green);
+            margin: 30px 0;
+            padding: 20px 40px;
+            border: 4px solid var(--neon-green);
             background: transparent;
             color: var(--neon-green);
             text-decoration: none;
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-size: 2.2rem;
             font-weight: bold;
-            text-transform: uppercase;
             cursor: grab;
-            transition: all 0.2s;
-            box-shadow: 5px 5px 0px #000;
+            transition: all 0.1s;
+            box-shadow: 8px 8px 0px #000;
+            text-transform: uppercase;
         }
 
         .bookmark-btn:hover {
             background: var(--neon-green);
             color: #000;
-            box-shadow: 0 0 40px var(--neon-green), 10px 10px 0px #000;
-            transform: translate(-5px, -5px);
-        }
-
-        .bookmark-btn:active {
-            cursor: grabbing;
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px #000;
+            box-shadow: 0 0 50px var(--neon-green);
+            transform: translate(-4px, -4px);
         }
 
         .terminal-text {
-            font-size: clamp(1rem, 2vw, 1.4rem);
+            font-size: 1.3rem;
             line-height: 1.4;
             text-align: left;
             border-top: 2px solid var(--neon-green);
             padding-top: 20px;
-            color: var(--neon-green);
         }
 
-        .cursor {
-            display: inline-block;
-            width: 12px;
-            height: 1.4rem;
-            background: var(--neon-green);
-            animation: blink 0.8s infinite;
-            vertical-align: middle;
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Flicker de monitor antigo */
+        /* EFEITO DE CINTILAÇÃO TELA VELHA */
         body::after {
             content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.02);
-            pointer-events: none;
-            z-index: 200;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            pointer-events: none; z-index: 200;
             animation: flicker 0.1s infinite;
         }
-
         @keyframes flicker {
-            0% { opacity: 0.1; }
-            50% { opacity: 0.2; }
-            100% { opacity: 0.1; }
+            0% { opacity: 0.1; } 50% { opacity: 0.15; } 100% { opacity: 0.1; }
         }
     </style>
 </head>
@@ -189,8 +153,8 @@
     <div class="scanlines"></div>
 
     <div class="osd">
-        PLAY  00:04:20:15<br>
-        SP  AUTO-LINK
+        PLAY  00:00:24:02<br>
+        AUTO-GAMBIARRA
     </div>
     <div class="osd-rec">● REC</div>
 
@@ -199,83 +163,104 @@
     </div>
 
     <div class="main-frame">
-        <h1>REVAN_TOOL_V1</h1>
-        
-        <p style="letter-spacing: 5px;">[ INICIALIZANDO... ]</p>
+        <h1>REVAN_FIXER_OS</h1>
+        <p style="letter-spacing: 3px;">[ AGUARDANDO INPUT EXTERNO ]</p>
 
         <a class="bookmark-btn" href="javascript:(function(){var h=document.querySelector('#interaction-header-participant-name');if(!h)return;var t=h.innerHTML;var r=/\[(\d+)\]/g;h.innerHTML=t.replace(r,function(m,id){var u='https://novorevan.brisanet.net.br/#/venda/cliente/'+id+'/sobre';return'[<a href=\x22'+u+'\x22 target=\x22_blank\x22 style=\x22color:#00bfff;font-weight:bold;\x22>'+id+'</a>]';});})();">
-            ARRASAR PARA FAVORITOS
+            PUXE PARA FAVORITOS
         </a>
 
         <div class="terminal-text">
-            > SYS: GAMBIARRA ENGINE ACTIVE<br>
-            > TARGET: NOVO_REVAN_LINKER<br>
-            > DRIFT: VHS_MODE_ON<br>
-            > READY: WAITING_FOR_USER_<span class="cursor"></span>
+            > KERNEL: VHS_DRIVE_V2.0.1<br>
+            > EMULATING: DVD_BOUNCE_PHYSICS<br>
+            > STATUS: OPERACIONAL...<br>
+            > USER: ADMIN_<span style="animation: blink 0.8s infinite">█</span>
         </div>
     </div>
 
     <script>
-        const gambiarra = document.getElementById('gambiarra');
+        const logo = document.getElementById('gambiarra');
         
-        // Velocidade baseada na resolução para não ficar lento em 4K
-        let xSpeed = window.innerWidth > 1200 ? 5 : 3;
-        let ySpeed = window.innerHeight > 800 ? 5 : 3;
+        // Configurações de Movimento Estilo DVD
+        let speed = 4; // Velocidade base
+        let xSpeed = speed * (Math.random() > 0.5 ? 1 : -1);
+        let ySpeed = (speed * 0.85) * (Math.random() > 0.5 ? 1 : -1); // Y levemente diferente de X para variar o trajeto
         
-        let x = Math.random() * (window.innerWidth - 300);
-        let y = Math.random() * (window.innerHeight - 150);
+        // Posição inicial aleatória
+        let x = Math.random() * (window.innerWidth - 400);
+        let y = Math.random() * (window.innerHeight - 200);
         
-        const neonColors = ['#ff00ff', '#00ffff', '#39ff14', '#ffff00', '#ff4d00', '#0049ff'];
+        const neonColors = ['#ff00ff', '#00ffff', '#39ff14', '#ffff00', '#ff3300', '#0066ff'];
         let colorIndex = 0;
 
-        function animate() {
+        function update() {
             x += xSpeed;
             y += ySpeed;
 
-            // Checa colisão com as bordas
-            if (x + gambiarra.offsetWidth >= window.innerWidth || x <= 0) {
-                xSpeed = -xSpeed;
-                hitWall();
-            }
-            if (y + gambiarra.offsetHeight >= window.innerHeight || y <= 0) {
-                ySpeed = -ySpeed;
-                hitWall();
+            const rect = logo.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            // Colisão Direita/Esquerda
+            if (x + width >= window.innerWidth) {
+                x = window.innerWidth - width;
+                xSpeed *= -1;
+                addRandomDrift();
+                onHit();
+            } else if (x <= 0) {
+                x = 0;
+                xSpeed *= -1;
+                addRandomDrift();
+                onHit();
             }
 
-            gambiarra.style.left = x + 'px';
-            gambiarra.style.top = y + 'px';
-            requestAnimationFrame(animate);
+            // Colisão Topo/Base
+            if (y + height >= window.innerHeight) {
+                y = window.innerHeight - height;
+                ySpeed *= -1;
+                addRandomDrift();
+                onHit();
+            } else if (y <= 0) {
+                y = 0;
+                ySpeed *= -1;
+                addRandomDrift();
+                onHit();
+            }
+
+            logo.style.transform = `translate(${x}px, ${y}px)`;
+            requestAnimationFrame(update);
         }
 
-        function hitWall() {
+        // Função para evitar trajetos repetitivos (Drift Analógico)
+        function addRandomDrift() {
+            const drift = (Math.random() - 0.5) * 0.2; // Pequena variação aleatória
+            if (Math.abs(xSpeed) > 1) xSpeed += drift;
+            if (Math.abs(ySpeed) > 1) ySpeed += drift;
+        }
+
+        function onHit() {
             colorIndex = (colorIndex + 1) % neonColors.length;
-            const newColor = neonColors[colorIndex];
+            const nextColor = neonColors[colorIndex];
             
-            gambiarra.style.color = newColor;
-            gambiarra.style.filter = `drop-shadow(0 0 20px ${newColor})`;
+            logo.style.color = nextColor;
+            logo.style.filter = `drop-shadow(0 0 30px ${nextColor})`;
             
-            // Glitch visual no card central
+            // Glitch visual na borda do painel
             const frame = document.querySelector('.main-frame');
-            frame.style.borderColor = newColor;
-            frame.style.boxShadow = `0 0 50px ${newColor}`;
-            
+            frame.style.borderColor = nextColor;
             setTimeout(() => {
                 frame.style.borderColor = 'var(--neon-green)';
-                frame.style.boxShadow = `0 0 30px rgba(57, 255, 20, 0.3)`;
-            }, 150);
+            }, 100);
         }
 
-        animate();
-
-        // Reposicionamento inteligente ao redimensionar
+        // Garante que o logo não fique preso fora da tela ao redimensionar
         window.addEventListener('resize', () => {
-            x = Math.min(x, window.innerWidth - gambiarra.offsetWidth);
-            y = Math.min(y, window.innerHeight - gambiarra.offsetHeight);
-            
-            // Ajusta velocidade dinamicamente se a tela aumentar muito
-            xSpeed = (xSpeed > 0 ? 1 : -1) * (window.innerWidth > 1200 ? 5 : 3);
-            ySpeed = (ySpeed > 0 ? 1 : -1) * (window.innerHeight > 800 ? 5 : 3);
+            x = Math.min(x, window.innerWidth - logo.offsetWidth);
+            y = Math.min(y, window.innerHeight - logo.offsetHeight);
         });
+
+        // Inicia animação
+        update();
     </script>
 </body>
 </html>
