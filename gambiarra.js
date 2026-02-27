@@ -1,36 +1,41 @@
 javascript:(function(){
-if(window.__linkClienteAtivo)return;
-window.__linkClienteAtivo=true;
 
-function atualizar(){
+if(window.__botaoClienteAtivo)return;
+window.__botaoClienteAtivo=true;
+
+function criarOuAtualizarBotao(){
   const el=document.querySelector('#interaction-header-participant-name');
   if(!el)return;
 
-  const texto=el.textContent;
-
-  const match=texto.match(/\[(\d+)\]/);
+  const match=el.textContent.match(/\[(\d+)\]/);
   if(!match)return;
 
   const id=match[1];
   const url='https://novorevan.brisanet.net.br/#/venda/cliente/'+id+'/sobre';
 
-  // Remove links antigos
-  const links=el.querySelectorAll('a[data-cliente-link]');
-  links.forEach(a=>a.replaceWith(a.textContent));
+  let botao=document.getElementById('abrir-cliente-btn');
 
-  // Substitui apenas o ID
-  el.innerHTML=el.innerHTML.replace(
-    '['+id+']',
-    '[<a data-cliente-link="1" href="'+url+'" target="_blank" style="color:#00bfff;font-weight:bold;">'+id+'</a>]'
-  );
+  if(!botao){
+    botao=document.createElement('a');
+    botao.id='abrir-cliente-btn';
+    botao.target='_blank';
+    botao.style.marginLeft='10px';
+    botao.style.padding='4px 8px';
+    botao.style.background='#00bfff';
+    botao.style.color='#fff';
+    botao.style.borderRadius='4px';
+    botao.style.fontSize='12px';
+    botao.style.textDecoration='none';
+    botao.innerText='Abrir Cliente';
+    el.appendChild(botao);
+  }
+
+  botao.href=url;
 }
 
-new MutationObserver(atualizar)
-.observe(document.querySelector('#interaction-header-participant-name'),{
-  childList:true,
-  subtree:true,
-  characterData:true
-});
+new MutationObserver(criarOuAtualizarBotao)
+.observe(document.body,{childList:true,subtree:true});
 
-atualizar();
+criarOuAtualizarBotao();
+
 })();
