@@ -3,8 +3,8 @@
     const BUTTON_ID = "btn-novorevan-cliente";
 
     function extrairIdCliente(texto) {
-        // Procura padrão: -[qualquercoisa]-[1231231]
-        const regex = /\-\[[^\]]+\]\-\[(\d+)\]/;
+        // Procura qualquer coisa no formato -[123123]
+        const regex = /\-\s*\[(\d+)\]/;
         const match = texto.match(regex);
         return match ? match[1] : null;
     }
@@ -18,7 +18,7 @@
         botao.style.marginLeft = "10px";
         botao.style.padding = "4px 8px";
         botao.style.cursor = "pointer";
-
+        botao.style.opacity = "0.5";
         botao.disabled = true;
 
         const h2 = document.getElementById(TARGET_ID);
@@ -30,7 +30,6 @@
     function atualizarBotao() {
         const h2 = document.getElementById(TARGET_ID);
         const botao = document.getElementById(BUTTON_ID);
-
         if (!h2 || !botao) return;
 
         const texto = h2.innerText.trim();
@@ -38,35 +37,29 @@
 
         if (idCliente) {
             botao.disabled = false;
-            botao.onclick = function () {
+            botao.style.opacity = "1";
+            botao.onclick = () => {
                 const url = `https://novorevan.brisanet.net.br/#/venda/cliente/${idCliente}/sobre`;
                 window.open(url, "_blank");
             };
-            botao.style.opacity = "1";
         } else {
             botao.disabled = true;
-            botao.onclick = null;
             botao.style.opacity = "0.5";
+            botao.onclick = null;
         }
     }
 
-    function iniciarObservador() {
-        const target = document.body;
+    const observer = new MutationObserver(() => {
+        criarBotao();
+        atualizarBotao();
+    });
 
-        const observer = new MutationObserver(() => {
-            criarBotao();
-            atualizarBotao();
-        });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
 
-        observer.observe(target, {
-            childList: true,
-            subtree: true,
-            characterData: true
-        });
-    }
-
-    // Inicialização
     criarBotao();
     atualizarBotao();
-    iniciarObservador();
 })();
