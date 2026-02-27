@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAMBIARRA_SYSTEM_V1.0</title>
+    <title>GAMBIARRA_ULTRA_SYSTEM</title>
     <style>
-        /* Importando fonte mono para cara de terminal antigo */
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
         :root {
-            --bg-color: #0a0a0a;
+            --bg-color: #050505;
             --neon-green: #39ff14;
             --neon-pink: #ff00ff;
             --neon-blue: #00ffff;
-            --vhs-gray: #aaaaaa;
+            --vhs-gray: #cccccc;
         }
 
         body, html {
@@ -30,53 +29,48 @@
             justify-content: center;
         }
 
-        /* Camada de Interferência VHS */
+        /* Camadas de Efeito VHS */
         .vhs-noise {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 100;
             pointer-events: none;
-            opacity: 0.08;
+            opacity: 0.12;
             background: url('https://media.giphy.com/media/oEI9uWUicG3Y166A7v/giphy.gif');
         }
 
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
-            ), linear-gradient(
-                90deg, 
-                rgba(255, 0, 0, 0.06), 
-                rgba(0, 255, 0, 0.02), 
-                rgba(0, 0, 255, 0.06)
-            );
-            background-size: 100% 3px, 3px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            background-size: 100% 4px, 3px 100%;
             z-index: 101;
             pointer-events: none;
         }
 
-        /* On-Screen Display (VHS Text) */
+        /* OSD (On-Screen Display) */
         .osd {
             position: absolute;
-            top: 30px;
-            left: 40px;
-            font-size: 2rem;
+            top: 5vh;
+            left: 5vw;
+            font-size: clamp(1.5rem, 4vw, 3rem);
             color: var(--vhs-gray);
-            text-shadow: 2px 2px #000;
+            text-shadow: 3px 3px #000;
             z-index: 50;
+            letter-spacing: 2px;
         }
 
         .osd-rec {
             position: absolute;
-            top: 30px;
-            right: 40px;
-            color: red;
+            top: 5vh;
+            right: 5vw;
+            color: #ff0000;
+            font-size: clamp(1.5rem, 4vw, 3rem);
             animation: blink 1s steps(2) infinite;
         }
 
-        /* Logo DVD Bouncing */
+        /* LOGO DVD GAMBIARRA - TAMANHO DINÂMICO */
         #dvd-container {
             position: absolute;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -85,76 +79,82 @@
 
         .dvd-logo {
             position: absolute;
-            font-size: 4rem;
+            /* clamp(mínimo, preferencial, máximo) */
+            font-size: clamp(3rem, 15vw, 18rem); 
             font-weight: 900;
             white-space: nowrap;
             color: var(--neon-pink);
-            text-shadow: 4px 4px 0px #000;
+            text-shadow: 8px 8px 0px #000;
             font-style: italic;
-            letter-spacing: -2px;
-            filter: drop-shadow(0 0 5px var(--neon-pink));
+            letter-spacing: -5px;
+            filter: drop-shadow(0 0 15px var(--neon-pink));
+            line-height: 1;
+            user-select: none;
         }
 
         /* Interface Central */
         .main-frame {
             position: relative;
             z-index: 150;
-            border: 4px double var(--neon-green);
-            padding: 30px;
-            background: #000;
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
-            max-width: 400px;
+            border: 6px double var(--neon-green);
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+            width: 90%;
+            max-width: 500px;
             text-align: center;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-top: 0;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin: 0 0 20px 0;
             color: var(--neon-blue);
-            text-transform: uppercase;
+            text-shadow: 3px 3px 0px #000;
         }
 
-        /* Botão Estilo Retro-Hacker */
+        /* Botão Bookmarklet */
         .bookmark-btn {
             display: inline-block;
-            margin: 20px 0;
-            padding: 15px 25px;
-            border: 2px solid var(--neon-green);
+            margin: 25px 0;
+            padding: clamp(15px, 3vw, 25px) clamp(20px, 4vw, 40px);
+            border: 3px solid var(--neon-green);
             background: transparent;
             color: var(--neon-green);
             text-decoration: none;
-            font-size: 1.8rem;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             font-weight: bold;
             text-transform: uppercase;
             cursor: grab;
             transition: all 0.2s;
-            position: relative;
+            box-shadow: 5px 5px 0px #000;
         }
 
         .bookmark-btn:hover {
             background: var(--neon-green);
             color: #000;
-            box-shadow: 0 0 30px var(--neon-green);
+            box-shadow: 0 0 40px var(--neon-green), 10px 10px 0px #000;
+            transform: translate(-5px, -5px);
         }
 
         .bookmark-btn:active {
             cursor: grabbing;
-            transform: scale(0.95);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
         }
 
         .terminal-text {
-            font-size: 1.1rem;
-            line-height: 1.2;
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            line-height: 1.4;
             text-align: left;
-            border-top: 1px solid var(--neon-green);
-            padding-top: 15px;
+            border-top: 2px solid var(--neon-green);
+            padding-top: 20px;
             color: var(--neon-green);
         }
 
         .cursor {
             display: inline-block;
-            width: 10px;
-            height: 1.2rem;
+            width: 12px;
+            height: 1.4rem;
             background: var(--neon-green);
             animation: blink 0.8s infinite;
             vertical-align: middle;
@@ -165,24 +165,21 @@
             50% { opacity: 0; }
         }
 
-        /* Flicker da tela */
-        @keyframes flicker {
-            0% { opacity: 0.97; }
-            5% { opacity: 0.95; }
-            10% { opacity: 0.9; }
-            15% { opacity: 0.98; }
-            100% { opacity: 1; }
+        /* Flicker de monitor antigo */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
+            z-index: 200;
+            animation: flicker 0.1s infinite;
         }
 
-        body::after {
-            content: " ";
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: rgba(18, 16, 16, 0.1);
-            opacity: 0;
-            z-index: 200;
-            pointer-events: none;
-            animation: flicker 0.15s infinite;
+        @keyframes flicker {
+            0% { opacity: 0.1; }
+            50% { opacity: 0.2; }
+            100% { opacity: 0.1; }
         }
     </style>
 </head>
@@ -191,56 +188,56 @@
     <div class="vhs-noise"></div>
     <div class="scanlines"></div>
 
-    <!-- OSD Estilo Fita Cassete -->
     <div class="osd">
         PLAY  00:04:20:15<br>
-        SP  --/--/--
+        SP  AUTO-LINK
     </div>
     <div class="osd-rec">● REC</div>
 
-    <!-- Logo DVD Bouncing -->
     <div id="dvd-container">
         <div id="gambiarra" class="dvd-logo">GAMBIARRA</div>
     </div>
 
-    <!-- Interface Principal -->
     <div class="main-frame">
-        <h1>REVAN_LINKER.EXE</h1>
+        <h1>REVAN_TOOL_V1</h1>
         
-        <p>CONEXÃO ESTABELECIDA...</p>
+        <p style="letter-spacing: 5px;">[ INICIALIZANDO... ]</p>
 
         <a class="bookmark-btn" href="javascript:(function(){var h=document.querySelector('#interaction-header-participant-name');if(!h)return;var t=h.innerHTML;var r=/\[(\d+)\]/g;h.innerHTML=t.replace(r,function(m,id){var u='https://novorevan.brisanet.net.br/#/venda/cliente/'+id+'/sobre';return'[<a href=\x22'+u+'\x22 target=\x22_blank\x22 style=\x22color:#00bfff;font-weight:bold;\x22>'+id+'</a>]';});})();">
-            [ ARRASTE-ME ]
+            ARRASAR PARA FAVORITOS
         </a>
 
         <div class="terminal-text">
-            > INSTRUÇÃO: ARRASTE PARA A BARRA DE FAVORITOS<br>
-            > STATUS: AGUARDANDO COMANDO<br>
-            > SOURCE: BRISANET_NET_BR<br>
-            > USER_AUTH: GRANTED_<span class="cursor"></span>
+            > SYS: GAMBIARRA ENGINE ACTIVE<br>
+            > TARGET: NOVO_REVAN_LINKER<br>
+            > DRIFT: VHS_MODE_ON<br>
+            > READY: WAITING_FOR_USER_<span class="cursor"></span>
         </div>
     </div>
 
     <script>
-        // Lógica do Logo DVD Bouncing
         const gambiarra = document.getElementById('gambiarra');
-        let x = Math.random() * (window.innerWidth - 250);
-        let y = Math.random() * (window.innerHeight - 100);
-        let xSpeed = 3;
-        let ySpeed = 3;
         
-        const neonColors = ['#ff00ff', '#00ffff', '#39ff14', '#ffff00', '#ff0000'];
+        // Velocidade baseada na resolução para não ficar lento em 4K
+        let xSpeed = window.innerWidth > 1200 ? 5 : 3;
+        let ySpeed = window.innerHeight > 800 ? 5 : 3;
+        
+        let x = Math.random() * (window.innerWidth - 300);
+        let y = Math.random() * (window.innerHeight - 150);
+        
+        const neonColors = ['#ff00ff', '#00ffff', '#39ff14', '#ffff00', '#ff4d00', '#0049ff'];
         let colorIndex = 0;
 
         function animate() {
             x += xSpeed;
             y += ySpeed;
 
-            if (x + gambiarra.clientWidth >= window.innerWidth || x <= 0) {
+            // Checa colisão com as bordas
+            if (x + gambiarra.offsetWidth >= window.innerWidth || x <= 0) {
                 xSpeed = -xSpeed;
                 hitWall();
             }
-            if (y + gambiarra.clientHeight >= window.innerHeight || y <= 0) {
+            if (y + gambiarra.offsetHeight >= window.innerHeight || y <= 0) {
                 ySpeed = -ySpeed;
                 hitWall();
             }
@@ -252,22 +249,32 @@
 
         function hitWall() {
             colorIndex = (colorIndex + 1) % neonColors.length;
-            gambiarra.style.color = neonColors[colorIndex];
-            gambiarra.style.filter = `drop-shadow(0 0 10px ${neonColors[colorIndex]})`;
+            const newColor = neonColors[colorIndex];
             
-            // Pequeno glitch visual no card quando o logo bate na parede
-            document.querySelector('.main-frame').style.borderColor = neonColors[colorIndex];
+            gambiarra.style.color = newColor;
+            gambiarra.style.filter = `drop-shadow(0 0 20px ${newColor})`;
+            
+            // Glitch visual no card central
+            const frame = document.querySelector('.main-frame');
+            frame.style.borderColor = newColor;
+            frame.style.boxShadow = `0 0 50px ${newColor}`;
+            
             setTimeout(() => {
-                document.querySelector('.main-frame').style.borderColor = 'var(--neon-green)';
-            }, 100);
+                frame.style.borderColor = 'var(--neon-green)';
+                frame.style.boxShadow = `0 0 30px rgba(57, 255, 20, 0.3)`;
+            }, 150);
         }
 
         animate();
 
-        // Reposicionar se a janela mudar de tamanho
+        // Reposicionamento inteligente ao redimensionar
         window.addEventListener('resize', () => {
-            x = Math.min(x, window.innerWidth - 250);
-            y = Math.min(y, window.innerHeight - 100);
+            x = Math.min(x, window.innerWidth - gambiarra.offsetWidth);
+            y = Math.min(y, window.innerHeight - gambiarra.offsetHeight);
+            
+            // Ajusta velocidade dinamicamente se a tela aumentar muito
+            xSpeed = (xSpeed > 0 ? 1 : -1) * (window.innerWidth > 1200 ? 5 : 3);
+            ySpeed = (ySpeed > 0 ? 1 : -1) * (window.innerHeight > 800 ? 5 : 3);
         });
     </script>
 </body>
