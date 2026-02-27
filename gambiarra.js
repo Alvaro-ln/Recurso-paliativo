@@ -1,0 +1,1 @@
+javascript:(function(){var h=document.querySelector('#interaction-header-participant-name');if(!h)return;var t=h.innerHTML;var r=/\[(\d+)\]/g;h.innerHTML=t.replace(r,function(m,id){var u='https://novorevan.brisanet.net.br/#/venda/cliente/'+id+'/sobre';return'[<a href="'+u+'" target="_blank" style="color:#00bfff;font-weight:bold;">'+id+'</a>]';});})();
