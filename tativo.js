@@ -20,6 +20,11 @@
         return /mobile number,?\s*brazil/i.test(texto);
     }
 
+    function isCPF(texto) {
+        const apenasNumeros = texto.replace(/[\.\-]/g, '').trim();
+        return /^\d{11}$/.test(apenasNumeros);
+    }
+
     function getNomeOperador() {
         const elements = document.querySelectorAll(".entry-value");
         for (let el of elements) {
@@ -62,7 +67,7 @@
         const texto = h2.innerText.trim().replace(/\s+/g, ' ');
         const idCliente = extrairIdCliente(texto);
 
-        // Caso normal: ID extraído do próprio texto
+        // Caso 1: ID extraído do próprio texto
         if (idCliente) {
             botao.disabled = false;
             botao.style.opacity = "1";
@@ -75,7 +80,7 @@
             return;
         }
 
-        // Caso especial: "Mobile Number, Brazil" → usar área de transferência, sem registrar na planilha
+        // Caso 2: "Mobile Number, Brazil" → usar área de transferência como ID, sem registrar
         if (isMobileNumberBrazil(texto)) {
             botao.disabled = false;
             botao.style.opacity = "1";
@@ -102,11 +107,31 @@
             return;
         }
 
-        // Nenhum ID encontrado e não é Mobile Number
-        botao.disabled = true;
-        botao.style.opacity = "0.5";
-        botao.title = "";
-        botao.onclick = null;
+        // Caso 3: Qualquer outro caso → verificar se há CPF na área de transferência
+        botao.disabled = false;
+        botao.style.opacity = "1";
+        botao.title = "Clique para buscar pelo CPF da área de transferência";
+        botao.onclick = async () => {
+            let clipboardText = "";
+            try {
+                clipboardText = await navigator.clipboard.readText();
+            } catch (err) {
+                alert("Não foi possível acessar a área de transferência.\nCopie o CPF do cliente e tente novamente.");
+                return;
+            }
+
+            const cpfLimpo = clipboardText.replace(/[\.\-]/g, '').trim();
+
+            if (!isCPF(clipboardText)) {
+                alert(`Conteúdo da área de transferência inválido:\n"${clipboardText}"\n\nCopie um CPF válido (11 dígitos) e tente novamente.`);
+                botao.disabled = true;
+                botao.style.opacity = "0.5";
+                return;
+            }
+
+            const url = `https://novorevan.brisanet.net.br/#/pesquisa/Cliente/?q=${cpfLimpo}`;
+            window.open(url, "_blank");
+        };
     }
 
     const observer = new MutationObserver(() => {
