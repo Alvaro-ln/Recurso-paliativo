@@ -80,29 +80,37 @@
             return;
         }
 
-        // Caso 2: "Mobile Number, Brazil" → usar área de transferência como ID, sem registrar
+        // Caso 2: "Mobile Number, Brazil" → verificar clipboard: CPF vai para pesquisa, ID vai para cliente
         if (isMobileNumberBrazil(texto)) {
             botao.disabled = false;
             botao.style.opacity = "1";
-            botao.title = "Clique para usar o ID da área de transferência";
+            botao.title = "Clique para usar o ID ou CPF da área de transferência";
             botao.onclick = async () => {
                 let clipboardText = "";
                 try {
                     clipboardText = await navigator.clipboard.readText();
                 } catch (err) {
-                    alert("Não foi possível acessar a área de transferência.\nCopie o ID do cliente e tente novamente.");
+                    alert("Não foi possível acessar a área de transferência.\nCopie o ID ou CPF do cliente e tente novamente.");
                     return;
                 }
 
-                const idDaClipboard = clipboardText.trim().replace(/\s+/g, '');
+                const clipboardLimpo = clipboardText.replace(/[\.\-]/g, '').trim();
 
-                if (!/^\d+$/.test(idDaClipboard)) {
-                    alert(`Conteúdo da área de transferência inválido:\n"${clipboardText}"\n\nCopie apenas o ID numérico do cliente e tente novamente.`);
+                // Se for CPF (11 dígitos) → pesquisa por CPF
+                if (isCPF(clipboardText)) {
+                    const url = `https://novorevan.brisanet.net.br/#/pesquisa/Cliente/?q=${clipboardLimpo}`;
+                    window.open(url, "_blank");
                     return;
                 }
 
-                const url = `https://novorevan.brisanet.net.br/#/venda/cliente/${idDaClipboard}/sobre`;
-                window.open(url, "_blank");
+                // Se for ID numérico → abre diretamente o cliente
+                if (/^\d+$/.test(clipboardLimpo)) {
+                    const url = `https://novorevan.brisanet.net.br/#/venda/cliente/${clipboardLimpo}/sobre`;
+                    window.open(url, "_blank");
+                    return;
+                }
+
+                alert(`Conteúdo da área de transferência inválido:\n"${clipboardText}"\n\nCopie um ID numérico ou CPF válido e tente novamente.`);
             };
             return;
         }
